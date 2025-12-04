@@ -1,0 +1,64 @@
+{
+  "auth": {
+    "username": "admin",
+    "password": "password"
+  },
+  "relays": {
+    "1": {
+      "pin": 304,
+      "path": "/sys/class/gpio/P23_0/",
+      "chip": "gpiochip0",
+      "line": 184,
+      "active": "low"
+    },
+    "2": {
+      "pin": 456,
+      "path": "/sys/class/gpio/P42_0/",
+      "chip": "gpiochip0",
+      "line": 336,
+      "active": "low"
+    },
+    "3": {
+      "pin": 336,
+      "path": "/sys/class/gpio/P27_0/",
+      "chip": "gpiochip0",
+      "line": 216,
+      "active": "low"
+    },
+    "4": {
+      "pin": 345,
+      "path": "/sys/class/gpio/P28_1/",
+      "chip": "gpiochip0",
+      "line": 225,
+      "active": "low"
+    },
+    "5": {
+      "pin": 490,
+      "path": "/sys/class/gpio/P46_2/",
+      "chip": "gpiochip0",
+      "line": 370,
+      "active": "low"
+    },
+    "6": {
+      "pin": 491,
+      "path": "/sys/class/gpio/P46_3/",
+      "chip": "gpiochip0",
+      "line": 371,
+      "active": "low"
+    },
+    "7": {
+      "pin": 465,
+      "path": "/sys/class/gpio/P43_1/",
+      "chip": "gpiochip0",
+      "line": 345,
+      "active": "low"
+    },
+    "8": {
+      "pin": 466,
+      "path": "/sys/class/gpio/P43_2/",
+      "chip": "gpiochip0",
+      "line": 346,
+      "active": "low"
+    }
+  }
+}

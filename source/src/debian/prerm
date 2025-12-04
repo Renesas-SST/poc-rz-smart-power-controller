@@ -1,0 +1,17 @@
+#!/bin/sh
+set -e
+
+# Exit if systemd is not installed
+if ! command -v systemctl >/dev/null 2>&1; then
+    exit 0
+fi
+
+# Stop and disable the service before removal
+systemctl stop rz-smart-power-controller.service || true
+systemctl disable rz-smart-power-controller.service || true
+
+# Remove service file if it exists
+rm -f /usr/local/lib/systemd/system/rz-smart-power-controller.service
+
+# Reload systemd
+systemctl daemon-reload

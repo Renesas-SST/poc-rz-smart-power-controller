@@ -1,6 +1,8 @@
-# SPDX-License-Identifier: BSD-4-Clause
-# Copyright (c) 2025, Renesas Electronics America Inc
-# This file is part of the project under the BSD 4-Clause License.
+SPDX-License-Identifier: BSD-4-Clause
+
+Copyright (c) 2025, Renesas Electronics America Inc
+
+This file is part of the project under the BSD 4-Clause License.
 
 # Renesas Smart Power Controller - GPIO Relay Control System
 
@@ -16,7 +18,7 @@ The following describes the hierarchy of this release directory.
 ```
 .
 ├── bin
-│   └── at-powercycling-2.0.1-Linux.deb                     <------- ARM64 prebuilt debian installer package for RZ boards running yocto / ubuntu builds.
+│   └── rz-smart-power-controller-2.0.1-Linux.deb                     <------- ARM64 prebuilt debian installer package for RZ boards running yocto / ubuntu builds.
 ├── LICENSE.md                                              <------- BSD 4 clause license file.
 ├── r12uz0207eu0100-renesas-smart-power-controller.pdf      <------- Comprehensive user manual.
 ├── README.md                                               <------- This file. Start here alwyas.
@@ -48,9 +50,57 @@ Installation:
 Run the following commands on the debian file.
 
 ```
-# apt-get updat
-# ls /usr/local/etc/at-powercycling/gpio_config.jso
+# apt-get update
+# ls /usr/local/etc/rz-smart-power-controller/gpio_config.json
 ```
 Refer the user manual for full details.
 
 ---
+
+## GPIO Backend Configuration (libgpiod vs sysfs)
+
+The server supports two GPIO access backends:
+
+- `libgpiod` (preferred): uses the modern character device GPIO interface via the Python `gpiod` bindings.
+- `sysfs` (fallback / legacy): uses paths under `/sys/class/gpio/...`.
+
+Backend selection is controlled by the environment variable `RZSPC_GPIO_BACKEND`:
+
+- `auto` (default): prefer `libgpiod` when available and a relay entry provides `chip`/`line`; fall back to `sysfs` when not available.
+- `libgpiod`: force libgpiod-only operation (requires Python `gpiod` and per-relay `chip`/`line` fields).
+- `sysfs`: force sysfs-only operation (requires `path` fields in the relay config).
+
+Config format notes (in `src/gpio_config.json`): each relay may include either or both of the following:
+
+```
+"1": {
+    "pin": 304,
+    "path": "/sys/class/gpio/P23_0/value",    # sysfs path (legacy)
+    "chip": "gpiochip0",                      # libgpiod chip (optional)
+    "line": 0                                  # libgpiod line offset (optional)
+}
+```
+
+Examples:
+
+Set `libgpiod` preferred (auto) and start the server:
+```bash
+export RZSPC_GPIO_BACKEND=auto
+export RZSPC_TEMPLATES=$(pwd)/src/templates
+export RZSPC_CONFIG=$(pwd)/src/gpio_config.json
+python3 src/gpio_api_c.py
+```
+
+Force sysfs-only mode:
+```bash
+export RZSPC_GPIO_BACKEND=sysfs
+python3 src/gpio_api_c.py
+```
+
+Status endpoint (authenticated):
+```bash
+curl -u admin:password123 "http://localhost:5000/gpio_backend_status"
+```
+
+Adjust the `chip` and `line` values to match your platform's gpiochip device and line offsets when using libgpiod.
+

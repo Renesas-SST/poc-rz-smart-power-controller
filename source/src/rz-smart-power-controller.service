@@ -1,0 +1,17 @@
+[Unit]
+Description=RZ Smart Power Controller Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 @CMAKE_INSTALL_FULL_BINDIR@/gpio_api_c.py
+User=root
+Group=root
+Environment="RZSPC_TEMPLATES=@CMAKE_INSTALL_FULL_DATAROOTDIR@/rz-smart-power-controller/templates"
+Environment="RZSPC_CONFIG=@CMAKE_INSTALL_FULL_SYSCONFDIR@/rz-smart-power-controller/gpio_config.json"
+Environment="RZSPC_GPIO_BACKEND=auto"
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

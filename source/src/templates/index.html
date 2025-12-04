@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>GPIO Relay Control Dashboard</title>
+    <style>
+        /* Toggle Switch Styles */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: red;
+            /* OFF state */
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: green;
+            /* ON state */
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(26px);
+        }
+
+        .status-message {
+            font-size: 14px;
+            color: #333;
+            margin-top: 10px;
+        }
+    </style>
+    <script>
+        const refreshInterval = 2000; // Configurable refresh interval in ms
+
+        function toggleRelay(checkbox, relayId) {
+            const newState = checkbox.checked ? 1 : 0;
+            checkbox.disabled = true;
+
+            fetch(`/relay/${relayId}/${newState}`, { method: 'GET' })
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.message) {
+                        alert('Error: ' + (data.error || 'Unknown error'));
+                    }
+                })
+                .catch(error => alert('Request failed: ' + error))
+                .finally(() => {
+                    checkbox.disabled = false;
+                });
+        }
+
+        function refreshAllRelayStates() {
+            const switches = document.querySelectorAll('.switch input');
+            switches.forEach(checkbox => {
+                const relayId = checkbox.getAttribute('data-relay-id');
+                fetch(`/relay_state/${relayId}`, { method: 'GET' })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.state !== undefined) {
+                            checkbox.checked = (data.state === 1);
+                            // Update the state column text
+                            document.querySelector(`#state-${relayId}`).textContent =
+                                data.state === 1 ? 'ON' : 'OFF';
+                        }
+                    })
+                    .catch(error => console.error('Error refreshing state for relay ' + relayId + ':', error));
+            });
+        }
+
+        function startAutoRefresh() {
+            // Immediately fetch current states on page load
+            refreshAllRelayStates();
+
+            // Then start periodic refresh
+            setInterval(refreshAllRelayStates, refreshInterval);
+
+            document.getElementById('refresh-info').textContent =
+                `Auto-refresh every ${refreshInterval / 1000} seconds`;
+        }
+
+
+        window.onload = startAutoRefresh;
+    </script>
+</head>
+
+<body>
+    <h1>GPIO Relay Control Dashboard</h1>
+    <table border="1" cellpadding="10">
+        <tr>
+            <th>Relay ID</th>
+            <th>Current State</th>
+            <th>Action</th>
+        </tr>
+        {% for relay_id, relay in relays.items() %}
+        <tr>
+            <td>{{ relay_id }}</td>
+            <td id="state-{{ relay_id }}">{{ relay.state }}</td>
+            <td>
+                <label class="switch">
+                    <input type="checkbox" data-relay-id="{{ relay_id }}" onclick="toggleRelay(this, '{{ relay_id }}')"
+                        {% if relay.state=='ON' %}checked{% endif %}>
+                    <span class="slider"></span>
+                </label>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <div id="refresh-info" class="status-message"></div>
+</body>
+
+</html>

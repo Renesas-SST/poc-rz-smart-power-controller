@@ -1,0 +1,22 @@
+#!/bin/sh
+set -e
+
+# Exit if systemd is not installed
+if ! command -v systemctl >/dev/null 2>&1; then
+    echo "systemd not found, skipping service setup"
+    exit 0
+fi
+
+# Reload systemd to pick up new service file
+systemctl daemon-reload
+
+# Enable the service so it starts on boot
+systemctl enable rz-smart-power-controller.service || true
+
+# Attempt to start the service now. If start fails, do not fail the package install.
+# Use '|| true' so 'set -e' does not abort the installation on start failures.
+systemctl start rz-smart-power-controller.service || true
+
+# Notify user
+echo "RZ Smart Power Controller service has been enabled."
+echo "The package attempted to start the service; if it is not running, start it with: sudo systemctl start rz-smart-power-controller"

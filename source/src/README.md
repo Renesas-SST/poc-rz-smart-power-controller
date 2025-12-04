@@ -15,12 +15,12 @@ Provides a secure HTTP interface to control GPIO relays with Basic Authenticatio
 
 **Endpoints:**
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/` | GET | Home page with UI |
-| `/relay/<relay_id>/<state>` | GET | Set relay state (0 or 1) |
-| `/relay_state/<relay_id>` | GET | Get current relay state |
-| `/reload_config` | GET/POST | Reload config from JSON |
+| Endpoint                    | Method   | Description              |
+| --------------------------- | -------- | ------------------------ |
+| `/`                         | GET      | Home page with UI        |
+| `/relay/<relay_id>/<state>` | GET      | Set relay state (0 or 1) |
+| `/relay_state/<relay_id>`   | GET      | Get current relay state  |
+| `/reload_config`            | GET/POST | Reload config from JSON  |
 
 ### 2. `gpio_config.json` – Configuration
 Defines the GPIO pins and paths for each relay.
@@ -106,3 +106,10 @@ python3 gpio_api_c.py
 Then visit `http://localhost:5000` or `<your-device-ip>:5000`
 
 ---
+# Systemd unit (packaging)
+
+- Canonical unit installed by the package: `rz-smart-power-controller.service`.
+- The unit template lives at `src/rz-smart-power-controller.service` and is processed by CMake during the build.
+- When installed the package places the unit under `/usr/local/lib/systemd/system/rz-smart-power-controller.service` (respecting the configured install prefix). The package `postinst` enables and attempts to start the unit automatically; `prerm` will stop/disable and remove it on uninstall.
+
+If you previously used a wrapper-based unit that invoked `gpio_terminal.sh`, that legacy unit has been removed from the source tree — use the packaged `rz-smart-power-controller.service` for deployments.

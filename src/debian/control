@@ -1,9 +1,0 @@
-Package: at-powercycling
-Version: 2.0.1
-Section: utils
-Priority: optional
-Architecture: all
-Maintainer: Chandra Sekhar <chandra-sekhar-naidu.gorle.xa@renesas.com>
-Depends: python3, python3-flask, python3-flask-httpauth, jq
-Description: PowerCycling tool for GPIO control.
- A lightweight tool for remotely managing GPIO with setup and dashboard.

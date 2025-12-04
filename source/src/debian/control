@@ -1,0 +1,10 @@
+Package: rz-smart-power-controller
+Version: 2.1.0
+Section: utils
+Priority: optional
+Architecture: all
+Maintainer: Preetam S Reddy <preetam.reddy.cp@renesas.com>
+Depends: python3, python3-flask, python3-flask-httpauth, python3-libgpiod
+Suggests: libgpiod2
+Description: Relay controller tool for GPIO control.
+ A lightweight tool for remotely managing GPIO with setup and dashboard.
