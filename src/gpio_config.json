@@ -1,0 +1,12 @@
+{
+  "relays": {
+    "1": { "pin": 304, "path": "/sys/class/gpio/P23_0/value" },
+    "2": { "pin": 456, "path": "/sys/class/gpio/P42_0/value" },
+    "3": { "pin": 336, "path": "/sys/class/gpio/P27_0/value" },
+    "4": { "pin": 345, "path": "/sys/class/gpio/P28_1/value" },
+    "5": { "pin": 490, "path": "/sys/class/gpio/P46_2/value" },
+    "6": { "pin": 491, "path": "/sys/class/gpio/P46_3/value" },
+    "7": { "pin": 465, "path": "/sys/class/gpio/P43_1/value" },
+    "8": { "pin": 466, "path": "/sys/class/gpio/P43_2/value" }
+  }
+}
