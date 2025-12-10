@@ -18,25 +18,32 @@ The following describes the hierarchy of this release directory.
 ```
 .
 ├── bin
-│   └── rz-smart-power-controller-2.0.1-Linux.deb                     <------- ARM64 prebuilt debian installer package for RZ boards running yocto / ubuntu builds.
-├── LICENSE.md                                              <------- BSD 4 clause license file.
-├── r12uz0207eu0100-renesas-smart-power-controller.pdf      <------- Comprehensive user manual.
-├── README.md                                               <------- This file. Start here alwyas.
-└── src                                                     <------- Source code released under BSD-4-Clause License.
-    ├── CMakeLists.txt
-    ├── debian                                              <------- structure that helps create an installer.
-    │   └── control                                         <------- debian installer control file. Used to control installation in the final deb package.
-    ├── gpio_api_c.py
-    ├── gpio_config.json
-    ├── gpio_setup.sh
-    ├── gpio_terminal.sh
-    ├── LICENSE.md                                          <------- BSD-4-Clause License file for the source code.
-    ├── README.md                                           <------- Readme file about the source code.
-    ├── requirements.txt                                    <------- Python packages needed to be installed automatically in installer.
-    └── templates
-        └── index.html
+│   └── RZ-Smart-Power-Controller-2.0.1-Linux.deb              <------- ARM64 prebuilt debian installer package for RZ boards running yocto / ubuntu builds.
+├── LICENSE.md                                                 <------- BSD 4 clause license file.
+├── r12uz0207eu0210-renesas-smart-power-controller.pdf         <------- Comprehensive user manual.
+├── README.md                                                  <------- This file. Start here alwyas.
+└── source                                                     <------- Source code released under BSD-4-Clause License.
+    ├── build_deb.sh                                           <------- Primary build and package script.
+    └── src                                                    
+        ├── CMakeLists.txt                                     
+        ├── debian                                             <------- structure that helps create an installer.
+        │   ├── control                                        <------- debian installer control file. Used to control installation in the final deb package.
+        │   ├── postinst
+        │   └── prerm
+        ├── gpio_api_c.py                                      
+        ├── gpio_config.json                                   
+        ├── gpio_config_tool.py                                
+        ├── gpio_setup.sh
+        ├── gpio_terminal.sh
+        ├── LICENSE.md                                         <------- BSD-4-Clause License file for the source code.
+        ├── README.md                                          <------- Readme file about the source code.
+        ├── requirements.txt                                   <------- Python packages needed to be installed automatically in installer.
+        ├── rz-smart-power-controller.service    
+        ├── SYSTEMD.md    
+        └── templates    
+            └── index.html    
 
-5 directories, 14 files
+6 directories, 20 files
 ```
 > [!NOTE]
 > The src directory has its own README.md providing the details for the webserver application.
